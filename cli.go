@@ -10,7 +10,6 @@ import (
 	"os/exec"
 	"runtime"
 	"strconv"
-	"time"
 
 	N "github.com/NullpointerW/anicat/net"
 	"github.com/NullpointerW/anicat/net/cmd"
@@ -23,7 +22,7 @@ var (
 
 func init() {
 	flag.StringVar(&host, "h", "localhost", "server dial host")
-	flag.IntVar(&port, "p", 8080, "server dial port")
+	flag.IntVar(&port, "p", 12314, "server dial port")
 	flag.Parse()
 }
 
@@ -49,6 +48,8 @@ func main() {
 	for s.Scan() {
 		if f {
 			signal <- struct{}{}
+			fmt.Print(clearLine)
+			fmt.Print(cursorVisible)
 		}
 		f = true
 		fmt.Println(s.Text())
@@ -90,63 +91,4 @@ func main() {
 func exit(r *bufio.Reader) {
 	r.ReadString('\n')
 	os.Exit(1)
-}
-
-func waitProgress(c chan struct{}) {
-Wait:
-	fmt.Print("\033[K\r")
-	fmt.Print("\033[?25h")
-	<-c
-	st := time.Now()
-	for {
-		var elapsed time.Duration
-		fmt.Print("\033[?25l")
-		elapsed = time.Since(st)
-		fmt.Printf("\\ (%0.2f s)\r", elapsed.Seconds())
-		select {
-		case <-c:
-			goto Wait
-		default:
-		}
-		time.Sleep(100 * time.Millisecond)
-		select {
-		case <-c:
-			goto Wait
-		default:
-		}
-		elapsed = time.Since(st)
-		fmt.Printf("| (%0.2f s)\r", elapsed.Seconds())
-		select {
-		case <-c:
-			goto Wait
-		default:
-		}
-		time.Sleep(100 * time.Millisecond)
-		select {
-		case <-c:
-			goto Wait
-		default:
-		}
-		elapsed = time.Since(st)
-		fmt.Printf("- (%0.2f s)\r", elapsed.Seconds())
-		select {
-		case <-c:
-			goto Wait
-		default:
-		}
-		time.Sleep(100 * time.Millisecond)
-		select {
-		case <-c:
-			goto Wait
-		default:
-		}
-		elapsed = time.Since(st)
-		fmt.Printf("/ (%0.2f s)\r", elapsed.Seconds())
-		time.Sleep(100 * time.Millisecond)
-		select {
-		case <-c:
-			goto Wait
-		default:
-		}
-	}
 }
