@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
 	// "log"
 	"net"
@@ -15,18 +14,9 @@ import (
 	"github.com/NullpointerW/anicat/net/cmd"
 )
 
-var (
-	host string
-	port int
-)
-
-func init() {
-	flag.StringVar(&host, "h", "localhost", "server dial host")
-	flag.IntVar(&port, "p", 12314, "server dial port")
-	flag.Parse()
-}
-
 func main() {
+	Execute()
+	return
 	signal := make(chan struct{})
 	go waitProgress(signal)
 
