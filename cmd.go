@@ -13,12 +13,12 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:   "anicat",
-	Short: "Hugo is a very fast static site generator",
-	Long: `A Fast and Flexible Static Site Generator built with
-                love by spf13 and friends in Go.
-                Complete documentation is available at https://gohugo.io`,
+	Short: "anicat-cli is a command-line client used to control anicat.",
+	Long: `Use the "help" command to obtain usage instructions. For more details
+                For more information, please refer to https://github.com/NullpointerW/AniCat and
+                 https://github.com/NullpointerW/AniCat-cli`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("run hugo...")
+		cmd.Help()
 	},
 }
 
@@ -35,8 +35,6 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&host, "host", "O", "localhost", "server dial host")
 	rootCmd.PersistentFlags().IntVarP(&port, "port", "p", 12314, "server dial port")
 	rootCmd.AddCommand(versionCmd)
-
-	fmt.Println(os.Args)
 }
 
 func Execute() {
