@@ -14,27 +14,54 @@ var (
 var rootCmd = &cobra.Command{
 	Use:   "anicat",
 	Short: "anicat-cli is a command-line client used to control anicat.",
-	Long: `Use the "help" command to obtain usage instructions. For more details
-                For more information, please refer to https://github.com/NullpointerW/AniCat and
-                 https://github.com/NullpointerW/AniCat-cli`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
 }
 
-var versionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "Print the version number of Hugo",
-	Long:  `All software has versions. This is Hugo's`,
+var add = &cobra.Command{
+	Use:   "add",
+	Short: "Subscribe to anime series.",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("Hugo Static Site Generator v0.9 -- HEAD")
+	},
+}
+
+var ls = &cobra.Command{
+	Use:   "ls",
+	Short: "Show detailed information of subjects.",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("Hugo Static Site Generator v0.9 -- HEAD")
+	},
+}
+
+var lsi = &cobra.Command{
+	Use:   "lsi",
+	Short: "Show resource list.",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("Hugo Static Site Generator v0.9 -- HEAD")
+	},
+}
+var stat = &cobra.Command{
+	Use:   "stat",
+	Short: "Show downloading status with the subject.",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("Hugo Static Site Generator v0.9 -- HEAD")
+	},
+}
+
+var rm = &cobra.Command{
+	Use:   "rm",
+	Short: "Delete a subject.",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Hugo Static Site Generator v0.9 -- HEAD")
 	},
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&host, "host", "O", "localhost", "server dial host")
+	rootCmd.PersistentFlags().StringVarP(&host, "host", "H", "localhost", "server dial host")
 	rootCmd.PersistentFlags().IntVarP(&port, "port", "p", 12314, "server dial port")
-	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(add)
 }
 
 func Execute() {
