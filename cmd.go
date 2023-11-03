@@ -11,6 +11,16 @@ var (
 	port int
 )
 
+var (
+	mustContain    string
+	mustNotContain string
+	useRegexp      bool
+	group          string
+	feed           string
+	feedName       string
+	index          string
+)
+
 var rootCmd = &cobra.Command{
 	Use:   "anicat",
 	Short: "anicat-cli is a command-line client used to control anicat",
@@ -23,7 +33,7 @@ var add = &cobra.Command{
 	Use:   "add",
 	Short: "Subscribe to anime series",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Hugo Static Site Generator v0.9 -- HEAD")
+		fmt.Println(args)
 	},
 }
 
@@ -66,6 +76,12 @@ func init() {
 	rootCmd.AddCommand(lsi)
 	rootCmd.AddCommand(stat)
 	rootCmd.AddCommand(rm)
+}
+
+func addFlags() {
+	add.Flags().StringVarP()
+	add.Flags().StringVarP()
+	add.Flags().StringVarP()
 }
 
 func Execute() {
