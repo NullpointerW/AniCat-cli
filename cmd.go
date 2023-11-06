@@ -11,27 +11,25 @@ var (
 	port int
 )
 
-var (
-	mustContain    string
-	mustNotContain string
-	useRegexp      bool
-	group          string
-	feed           string
-	feedName       string
-	index          string
-)
-
 var rootCmd = &cobra.Command{
 	Use:   "anicat",
 	Short: "anicat-cli is a command-line client used to control anicat",
 	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Help()
+		_ = cmd.Help()
 	},
 }
 
 var add = &cobra.Command{
 	Use:   "add",
 	Short: "Subscribe to anime series",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(args)
+	},
+}
+
+var addFeed = &cobra.Command{
+	Use:   "feed",
+	Short: "Subscribe to anime series via rss feed",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(args)
 	},
@@ -68,20 +66,43 @@ var rm = &cobra.Command{
 	},
 }
 
+var stop = &cobra.Command{
+	Use:   "stop",
+	Short: "Stop progress",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("Hugo Static Site Generator v0.9 -- HEAD")
+	},
+}
+
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&host, "host", "H", "localhost", "server dial host")
-	rootCmd.PersistentFlags().IntVarP(&port, "port", "p", 12314, "server dial port")
+	rootCmd.PersistentFlags().StringVarP(&host, "host", "H", "localhost", "Server dial host")
+	rootCmd.PersistentFlags().IntVarP(&port, "port", "p", 12314, "Server dial port")
+	addFlags()
+	lsi.Flags().BoolVarP(&searchList, "search", "s", false, "Show search list")
 	rootCmd.AddCommand(add)
+	rootCmd.AddCommand(addFeed)
 	rootCmd.AddCommand(ls)
 	rootCmd.AddCommand(lsi)
 	rootCmd.AddCommand(stat)
 	rootCmd.AddCommand(rm)
+	rootCmd.AddCommand(stop)
 }
 
+var (
+	contain    string
+	exclude    string
+	useRegEXP  bool
+	group      string
+	index      string
+	searchList bool
+)
+
 func addFlags() {
-	add.Flags().StringVarP()
-	add.Flags().StringVarP()
-	add.Flags().StringVarP()
+	add.Flags().StringVarP(&contain, "contain", "c", "", "Contained keywords")
+	add.Flags().StringVarP(&exclude, "exclude", "e", "", "Excluded keywords")
+	add.Flags().BoolVarP(&useRegEXP, "regexp", "r", false, "Use regular expressions")
+	add.Flags().StringVarP(&group, "group", "g", "", "Subtitle group keywords")
+	add.Flags().StringVarP(&index, "index", "i", "", "Index of torrent list")
 }
 
 func Execute() {
