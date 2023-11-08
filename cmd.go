@@ -1,10 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	CMD "github.com/NullpointerW/anicat/net/cmd"
 	"github.com/spf13/cobra"
 	"os"
 	"strconv"
+	"strings"
 )
 
 var (
@@ -25,7 +28,26 @@ var add = &cobra.Command{
 	Use:   "add",
 	Short: "Subscribe to anime series",
 	Run: func(cmd *cobra.Command, args []string) {
-
+		arg := strings.Join(args, " ")
+		flag := CMD.AddFlag{
+			MustContain:    contain,
+			MustNotContain: exclude,
+			UseRegexp:      useRegEXP,
+			Group:          group,
+			Index:          index,
+		}
+		raw, _ := json.Marshal(flag)
+		c := CMD.Cmd{
+			Arg: arg,
+			Cmd: CMD.Add,
+			Raw: raw,
+		}
+		resp, err := Send(address, c)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(resp)
 	},
 	TraverseChildren: true,
 }
@@ -34,7 +56,25 @@ var feed = &cobra.Command{
 	Use:   "feed",
 	Short: "Subscribe to anime series via rss feed",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(args)
+		arg := strings.Join(args, "")
+		flag := CMD.AddFlag{
+			MustContain:    contain,
+			MustNotContain: exclude,
+			UseRegexp:      useRegEXP,
+			FeedInfoName:   infoNameForFeed,
+		}
+		raw, _ := json.Marshal(flag)
+		c := CMD.Cmd{
+			Arg: arg,
+			Cmd: CMD.Add,
+			Raw: raw,
+		}
+		resp, err := Send(address, c)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(resp)
 	},
 }
 
@@ -42,7 +82,16 @@ var ls = &cobra.Command{
 	Use:   "ls",
 	Short: "Show detailed information of subjects",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Hugo Static Site Generator v0.9 -- HEAD")
+		c := CMD.Cmd{
+			Cmd: CMD.Ls,
+			Raw: nil,
+		}
+		resp, err := Send(address, c)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(resp)
 	},
 }
 
@@ -50,7 +99,20 @@ var lsi = &cobra.Command{
 	Use:   "lsi",
 	Short: "Show resource list",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Hugo Static Site Generator v0.9 -- HEAD")
+		arg := strings.Join(args, "")
+		flag := CMD.LsiFlag{SearchList: searchList}
+		raw, _ := json.Marshal(flag)
+		c := CMD.Cmd{
+			Arg: arg,
+			Cmd: CMD.LsItems,
+			Raw: raw,
+		}
+		resp, err := Send(address, c)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(resp)
 	},
 }
 var stat = &cobra.Command{
@@ -81,6 +143,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&host, "host", "H", "localhost", "Server dial host")
 	rootCmd.PersistentFlags().IntVarP(&port, "port", "p", 12314, "Server dial port")
 	addFlags()
+	feed.Flags().StringVarP(&infoNameForFeed, "name", "n", "", "KeyName for solve info on AddFeed")
 	lsi.Flags().BoolVarP(&searchList, "search", "s", false, "Show search list")
 	rootCmd.AddCommand(add)
 	add.AddCommand(feed)
@@ -97,7 +160,7 @@ var (
 	exclude    string
 	useRegEXP  bool
 	group      string
-	index      string
+	index      int
 	searchList bool
 	// add feed --name
 	infoNameForFeed string
@@ -108,8 +171,8 @@ func addFlags() {
 	add.Flags().StringVarP(&exclude, "exclude", "e", "", "Excluded keywords")
 	add.Flags().BoolVarP(&useRegEXP, "regexp", "r", false, "Use regular expressions")
 	add.Flags().StringVarP(&group, "group", "g", "", "Subtitle group keywords")
-	add.Flags().StringVarP(&index, "index", "i", "", "Index of torrent list")
-	add.Flags().StringVarP(&infoNameForFeed, "name", "n", "", "KeyName for solve info on AddFeed")
+	add.Flags().IntVarP(&index, "index", "i", 0, "Index of torrent list")
+
 }
 
 func solveAddress() string {
@@ -120,7 +183,7 @@ func solveAddress() string {
 	return def
 }
 
-func Execute() {
+func main() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

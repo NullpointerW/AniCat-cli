@@ -2,30 +2,15 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	N "github.com/NullpointerW/anicat/net"
+	"github.com/NullpointerW/anicat/net/cmd"
+
 	// "log"
 	"net"
 )
 
-type cTyp int
-
-const (
-	Add cTyp = iota
-	AddFeed
-	Remove
-	Ls
-	LsItems
-	Status
-	Stop
-)
-
-type Cmd struct {
-	Cmd cTyp            `json:"cmd"`
-	Arg string          `json:"arg"`
-	Raw json.RawMessage `json:"raw"`
-}
-
-func Send(dialAddress string, cmd Cmd) (string, error) {
+func Send(dialAddress string, cmd cmd.Cmd) (string, error) {
 	signal := make(chan struct{})
 	go waitProgress(signal)
 	c, err := net.Dial("tcp", dialAddress)
@@ -46,5 +31,7 @@ func Send(dialAddress string, cmd Cmd) (string, error) {
 		return "", err
 	}
 	signal <- struct{}{}
-	return read, nil
+	fmt.Print(clearLine)
+	fmt.Print(cursorVisible)
+	return string(read), nil
 }
