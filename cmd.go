@@ -50,6 +50,7 @@ var add = &cobra.Command{
 		fmt.Println(resp)
 	},
 	TraverseChildren: true,
+	Args:             cobra.MinimumNArgs(1),
 }
 
 var feed = &cobra.Command{
@@ -76,6 +77,7 @@ var feed = &cobra.Command{
 		}
 		fmt.Println(resp)
 	},
+	Args: cobra.MinimumNArgs(1),
 }
 
 var ls = &cobra.Command{
@@ -114,6 +116,7 @@ var lsi = &cobra.Command{
 		}
 		fmt.Println(resp)
 	},
+	Args: cobra.MinimumNArgs(1),
 }
 var stat = &cobra.Command{
 	Use:   "stat",
@@ -129,6 +132,7 @@ var stat = &cobra.Command{
 		}
 		fmt.Println(resp)
 	},
+	Args: cobra.MinimumNArgs(1),
 }
 
 var rm = &cobra.Command{
@@ -147,6 +151,7 @@ var rm = &cobra.Command{
 		}
 		fmt.Println(resp)
 	},
+	Args: cobra.MinimumNArgs(1),
 }
 
 var stop = &cobra.Command{
