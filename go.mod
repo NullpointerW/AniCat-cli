@@ -3,7 +3,7 @@ module github.com/NullpointerW/anicat-cli
 go 1.21
 
 require (
-	github.com/NullpointerW/anicat v0.0.4-0.20231108094004-4a894981660b
+	github.com/NullpointerW/anicat v0.0.4-0.20231109093957-95db72ffb551
 	github.com/spf13/cobra v1.7.0
 )
 

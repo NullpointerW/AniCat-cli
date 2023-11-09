@@ -19,6 +19,7 @@ func Send(dialAddress string, cmd cmd.Cmd) (string, error) {
 	}
 	nc := &N.Conn{
 		TcpConn: c,
+		Max:     1024 * 1024,
 	}
 	b, _ := json.Marshal(cmd)
 	err = nc.Write(string(b))

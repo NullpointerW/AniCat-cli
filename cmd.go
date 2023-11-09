@@ -119,7 +119,15 @@ var stat = &cobra.Command{
 	Use:   "stat",
 	Short: "Show downloading status with the subject.",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Hugo Static Site Generator v0.9 -- HEAD")
+		c := CMD.Cmd{
+			Cmd: CMD.Status,
+		}
+		resp, err := Send(address, c)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(resp)
 	},
 }
 
@@ -127,7 +135,17 @@ var rm = &cobra.Command{
 	Use:   "rm",
 	Short: "Delete a subject",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Hugo Static Site Generator v0.9 -- HEAD")
+		arg := strings.Join(args, " ")
+		c := CMD.Cmd{
+			Arg: arg,
+			Cmd: CMD.Remove,
+		}
+		resp, err := Send(address, c)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(resp)
 	},
 }
 
@@ -135,7 +153,15 @@ var stop = &cobra.Command{
 	Use:   "stop",
 	Short: "Stop progress",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Hugo Static Site Generator v0.9 -- HEAD")
+		c := CMD.Cmd{
+			Cmd: CMD.Stop,
+		}
+		resp, err := Send(address, c)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(resp)
 	},
 }
 
