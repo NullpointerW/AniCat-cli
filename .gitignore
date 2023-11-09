@@ -6,3 +6,4 @@ build/
 test/env.yaml
 __debug_bin.exe
 anicat-cli.exe
+anicat.exe

@@ -119,10 +119,12 @@ var lsi = &cobra.Command{
 	Args: cobra.MinimumNArgs(1),
 }
 var stat = &cobra.Command{
+
 	Use:   "stat",
 	Short: "Show downloading status with the subject.",
 	Run: func(cmd *cobra.Command, args []string) {
 		c := CMD.Cmd{
+			Arg: args[0],
 			Cmd: CMD.Status,
 		}
 		resp, err := Send(address, c)
@@ -132,7 +134,7 @@ var stat = &cobra.Command{
 		}
 		fmt.Println(resp)
 	},
-	Args: cobra.MinimumNArgs(1),
+	Args: cobra.ExactArgs(1),
 }
 
 var rm = &cobra.Command{
