@@ -18,7 +18,11 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:   "anicat",
-	Short: "anicat-cli is a command-line client used to control anicat",
+	Short: "AniCat-Cli is a command-line client used to control AniCat",
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		// 在命令行参数解析之后，再调用 solveAddress
+		address = solveAddress()
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		_ = cmd.Help()
 	},
@@ -185,7 +189,6 @@ func init() {
 	rootCmd.AddCommand(stat)
 	rootCmd.AddCommand(rm)
 	rootCmd.AddCommand(stop)
-	address = solveAddress()
 }
 
 var (
