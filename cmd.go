@@ -105,7 +105,7 @@ var lsi = &cobra.Command{
 	Use:   "lsi",
 	Short: "Show resource list",
 	Run: func(cmd *cobra.Command, args []string) {
-		arg := strings.Join(args, "")
+		arg := strings.Join(args, " ")
 		flag := LsiFlag{SearchList: searchList}
 		raw, _ := json.Marshal(flag)
 		c := Cmd{
