@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	N "github.com/NullpointerW/anicat/net"
-	"github.com/NullpointerW/anicat/net/cmd"
+	//"github.com/NullpointerW/anicat/net/cmd"
 
 	// "log"
 	"net"
 )
 
-func Send(dialAddress string, cmd cmd.Cmd) (string, error) {
+func Send(dialAddress string, cmd Cmd) (string, error) {
 	signal := make(chan struct{})
 	go waitProgress(signal)
 	c, err := net.Dial("tcp", dialAddress)

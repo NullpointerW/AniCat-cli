@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	CMD "github.com/NullpointerW/anicat/net/cmd"
+	//CMD "github.com/NullpointerW/anicat/net/cmd"
 	"github.com/spf13/cobra"
 	"os"
 	"strconv"
@@ -33,7 +33,7 @@ var add = &cobra.Command{
 	Short: "Subscribe to anime series",
 	Run: func(cmd *cobra.Command, args []string) {
 		arg := strings.Join(args, " ")
-		flag := CMD.AddFlag{
+		flag := AddFlag{
 			MustContain:    contain,
 			MustNotContain: exclude,
 			UseRegexp:      useRegEXP,
@@ -41,9 +41,9 @@ var add = &cobra.Command{
 			Index:          index,
 		}
 		raw, _ := json.Marshal(flag)
-		c := CMD.Cmd{
+		c := Cmd{
 			Arg: arg,
-			Cmd: CMD.Add,
+			Cmd: Add,
 			Raw: raw,
 		}
 		resp, err := Send(address, c)
@@ -62,16 +62,16 @@ var feed = &cobra.Command{
 	Short: "Subscribe to anime series via rss feed",
 	Run: func(cmd *cobra.Command, args []string) {
 		arg := strings.Join(args, "")
-		flag := CMD.AddFlag{
+		flag := AddFlag{
 			MustContain:    contain,
 			MustNotContain: exclude,
 			UseRegexp:      useRegEXP,
 			FeedInfoName:   infoNameForFeed,
 		}
 		raw, _ := json.Marshal(flag)
-		c := CMD.Cmd{
+		c := Cmd{
 			Arg: arg,
-			Cmd: CMD.Add,
+			Cmd: Add,
 			Raw: raw,
 		}
 		resp, err := Send(address, c)
@@ -88,8 +88,8 @@ var ls = &cobra.Command{
 	Use:   "ls",
 	Short: "Show detailed information of subjects",
 	Run: func(cmd *cobra.Command, args []string) {
-		c := CMD.Cmd{
-			Cmd: CMD.Ls,
+		c := Cmd{
+			Cmd: Ls,
 			Raw: nil,
 		}
 		resp, err := Send(address, c)
@@ -106,11 +106,11 @@ var lsi = &cobra.Command{
 	Short: "Show resource list",
 	Run: func(cmd *cobra.Command, args []string) {
 		arg := strings.Join(args, "")
-		flag := CMD.LsiFlag{SearchList: searchList}
+		flag := LsiFlag{SearchList: searchList}
 		raw, _ := json.Marshal(flag)
-		c := CMD.Cmd{
+		c := Cmd{
 			Arg: arg,
-			Cmd: CMD.LsItems,
+			Cmd: LsItems,
 			Raw: raw,
 		}
 		resp, err := Send(address, c)
@@ -127,9 +127,9 @@ var stat = &cobra.Command{
 	Use:   "stat",
 	Short: "Show downloading status with the subject.",
 	Run: func(cmd *cobra.Command, args []string) {
-		c := CMD.Cmd{
+		c := Cmd{
 			Arg: args[0],
-			Cmd: CMD.Status,
+			Cmd: Status,
 		}
 		resp, err := Send(address, c)
 		if err != nil {
@@ -146,9 +146,9 @@ var rm = &cobra.Command{
 	Short: "Delete a subject",
 	Run: func(cmd *cobra.Command, args []string) {
 		arg := strings.Join(args, " ")
-		c := CMD.Cmd{
+		c := Cmd{
 			Arg: arg,
-			Cmd: CMD.Remove,
+			Cmd: Remove,
 		}
 		resp, err := Send(address, c)
 		if err != nil {
@@ -164,9 +164,30 @@ var stop = &cobra.Command{
 	Use:   "stop",
 	Short: "Stop progress",
 	Run: func(cmd *cobra.Command, args []string) {
-		c := CMD.Cmd{
-			Cmd: CMD.Stop,
+		c := Cmd{
+			Cmd: Stop,
 		}
+		resp, err := Send(address, c)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(resp)
+	},
+}
+
+var rename = &cobra.Command{
+	Use:   "rename",
+	Short: "Rename subject filename",
+	Run: func(cmd *cobra.Command, args []string) {
+		//fmt.Println(args, "len", len(args))
+		raw, _ := json.Marshal(args[1])
+		c := Cmd{
+			Cmd: Rename,
+			Arg: args[0],
+			Raw: raw,
+		}
+		//fmt.Printf("%#+v", c)
 		resp, err := Send(address, c)
 		if err != nil {
 			fmt.Println(err)
@@ -189,6 +210,7 @@ func init() {
 	rootCmd.AddCommand(stat)
 	rootCmd.AddCommand(rm)
 	rootCmd.AddCommand(stop)
+	rootCmd.AddCommand(rename)
 }
 
 var (
