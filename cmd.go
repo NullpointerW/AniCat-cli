@@ -2,12 +2,15 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+
 	//CMD "github.com/NullpointerW/anicat/net/cmd"
-	"github.com/spf13/cobra"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/spf13/cobra"
 )
 
 var (
@@ -133,6 +136,13 @@ var stat = &cobra.Command{
 		}
 		resp, err := Send(address, c)
 		if err != nil {
+			var ce **connErrorAdapter
+			if is := errors.As(err, ce); is {
+				err = statsBuiltinProcess((*ce).conn)
+				if err == nil {
+					return
+				}
+			}
 			fmt.Println(err)
 			return
 		}

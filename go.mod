@@ -8,6 +8,11 @@ require (
 )
 
 require (
+	github.com/gosuri/uilive v0.0.4 // indirect
+	github.com/mattn/go-isatty v0.0.16 // indirect
+)
+
+require (
 	github.com/NullpointerW/go-qbittorrent-apiv2 v0.0.16 // indirect
 	github.com/PuerkitoBio/goquery v1.8.1 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
@@ -18,6 +23,7 @@ require (
 	github.com/gocolly/colly v1.2.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/gosuri/uiprogress v0.0.1
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kennygrant/sanitize v1.2.4 // indirect

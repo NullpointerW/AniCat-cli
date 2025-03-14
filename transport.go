@@ -10,6 +10,14 @@ import (
 	"net"
 )
 
+type connErrorAdapter struct {
+	conn *N.Conn
+}
+
+func (c *connErrorAdapter) Error() string {
+	return ""
+}
+
 func Send(dialAddress string, cmd Cmd) (string, error) {
 	signal := make(chan struct{})
 	go waitProgress(signal)
@@ -34,5 +42,10 @@ func Send(dialAddress string, cmd Cmd) (string, error) {
 	signal <- struct{}{}
 	fmt.Print(clearLine)
 	fmt.Print(cursorVisible)
+	if string(read) == "keep-alive" {
+		return "", &connErrorAdapter{
+			conn: nc,
+		}
+	}
 	return string(read), nil
 }
