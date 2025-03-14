@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/json"
+	// "fmt"
+	"time"
 
 	N "github.com/NullpointerW/anicat/net"
 	"github.com/gosuri/uiprogress"
@@ -33,17 +35,19 @@ func statsBuiltinProcess(conn *N.Conn) error {
 		for _, t := range l.List {
 			if bar, ex := bars[t.Name]; !ex {
 				nbar := uiprogress.AddBar(100)
+				tname:=t.Name
 				nbar.PrependFunc(func(b *uiprogress.Bar) string {
-					return t.Name
+					return tname
 				})
-				_ = nbar.Set(t.Percentage)
 				nbar.AppendCompleted()
+				_ = nbar.Set(t.Percentage)
 				bars[t.Name] = nbar
 			} else {
 				bar.Set(t.Percentage)
 			}
 		}
 		if fin {
+			time.Sleep(1 * time.Second)
 			return nil
 		}
 	}

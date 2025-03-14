@@ -20,7 +20,9 @@ func (c *connErrorAdapter) Error() string {
 
 func Send(dialAddress string, cmd Cmd) (string, error) {
 	signal := make(chan struct{})
-	go waitProgress(signal)
+	stop:=make(chan struct{})
+	defer close(stop)
+	go waitProgress(signal,stop)
 	c, err := net.Dial("tcp", dialAddress)
 	if err != nil {
 		return "", err
