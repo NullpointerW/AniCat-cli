@@ -136,7 +136,7 @@ var stat = &cobra.Command{
 		}
 		resp, err := Send(address, c)
 		if err != nil {
-			var ce **connErrorAdapter
+			ce:=new(*connErrorAdapter)
 			if is := errors.As(err, ce); is {
 				err = statsBuiltinProcess((*ce).conn)
 				if err == nil {
