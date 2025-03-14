@@ -20,7 +20,9 @@ type TorrentProgress struct {
 
 func statsBuiltinProcess(conn *N.Conn) error {
 	bars := make(map[string]*uiprogress.Bar)
-	uiprogress.Start()
+	p:=uiprogress.New()
+	p.RefreshInterval=1*time.Second
+	p.Start()
 	for {
 		b, err := conn.Read()
 		if err != nil {
@@ -34,7 +36,7 @@ func statsBuiltinProcess(conn *N.Conn) error {
 		fin := l.Fin
 		for _, t := range l.List {
 			if bar, ex := bars[t.Name]; !ex {
-				nbar := uiprogress.AddBar(100)
+				nbar := p.AddBar(100)
 				tname:=t.Name
 				nbar.PrependFunc(func(b *uiprogress.Bar) string {
 					return tname
