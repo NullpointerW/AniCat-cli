@@ -49,7 +49,7 @@ func statsBuiltinProcess(conn *N.Conn) error {
 			}
 		}
 		if fin {
-			time.Sleep(1 * time.Second)
+			time.Sleep(2 * time.Second)
 			return nil
 		}
 	}
